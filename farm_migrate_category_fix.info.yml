@@ -1,0 +1,7 @@
+name: farmOS Log Category Migration Fix
+description: Provides a fix migration to populate log categories. See https://github.com/farmOS/farmOS/pull/481
+type: module
+package: farmOS Fix
+core_version_requirement: ^9
+dependencies:
+  - farm_migrate

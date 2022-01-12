@@ -1,0 +1,44 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - farm_migrate
+  enforced:
+    module:
+      - farm_migrate_category_fix
+id: farm_migrate_log_field_category
+label: 'Log category field migration (fix)'
+migration_tags:
+  - 'Drupal 7'
+  - 'farmOS 1.x'
+class: Drupal\migrate\Plugin\Migration
+field_plugin_method: null
+cck_plugin_method: null
+source:
+  plugin: d7_farm_log
+destination:
+  plugin: 'entity:log'
+process:
+  # Look up logs created by type-specific migrations.
+  id:
+    -
+      plugin: farm_migration_group_lookup
+      migration_group: farm_migrate_log
+      source: id
+      no_stub: true
+    # If no log was found in previous migrations, skip the row.
+    -
+      plugin: skip_on_empty
+      method: row
+  # Migrate log categories.
+  category:
+    plugin: sub_process
+    source: field_farm_log_category
+    process:
+      target_id:
+        plugin: migration_lookup
+        migration: farm_migrate_taxonomy_log_category
+        source: tid
+migration_dependencies:
+  required: {  }
+  optional: {  }
